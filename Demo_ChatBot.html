@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chatbot Đơn Giản</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 flex justify-center items-center h-screen">
+
+  <div class="w-full max-w-md bg-white shadow-xl rounded-2xl p-6">
+    <h2 class="text-xl font-bold text-center text-gray-700 mb-4">🤖 Chatbot Đơn Giản</h2>
+
+    <div class="messages h-80 overflow-y-auto p-3 bg-gray-100 rounded-lg space-y-2" id="messages"></div>
+
+    <div class="mt-4 flex">
+      <input type="text" id="input" placeholder="Nhập tin nhắn..." class="flex-1 p-2 border rounded-l-lg 
+      focus:outline-none focus:ring-2 focus:ring-indigo-500">
+      <button onclick="sendMessage()" class="bg-indigo-500 text-white px-4 py-2 rounded-r-lg hover:bg-indigo-600 
+      transition">Gửi</button>
+    </div>
+  </div>
+
+  <script>
+    // Danh sách phản hồi cứng
+    const responses = {
+      "chào": "Xin chào! Bạn cần giúp gì?",
+      "bạn tên gì": "Tôi là chatbot đơn giản!",
+      "bạn có khỏe không": "Tôi lúc nào cũng khỏe! Còn bạn?",
+      "hẹn gặp lại": "Tạm biệt! Hẹn gặp lại bạn sau.",
+      "cảm ơn": "Không có gì! Tôi luôn sẵn sàng giúp đỡ.",
+      "bạn bao nhiêu tuổi": "Tôi chỉ là một chatbot, không có tuổi!",
+      "bạn có thể làm gì": "Tôi có thể trò chuyện đơn giản với bạn!"
+    };
+
+    function typeEffect(element, text, speed = 50) {
+      let i = 0;
+      function typing() {
+        if (i < text.length) {
+          element.innerHTML += text.charAt(i);
+          i++;
+          setTimeout(typing, speed);
+        }
+      }
+      typing();
+    }
+
+    function sendMessage() {
+      const input = document.getElementById('input');
+      const messages = document.getElementById('messages');
+      const userMessage = input.value.trim();
+      if (!userMessage) return;
+
+      // Hiển thị tin nhắn người dùng
+      const userDiv = document.createElement("div");
+      userDiv.classList.add("p-2", "bg-blue-200", "rounded-lg", "text-right");
+      userDiv.textContent = userMessage;
+      messages.appendChild(userDiv);
+      input.value = '';
+      messages.scrollTop = messages.scrollHeight;
+
+      // Hiển thị phản hồi chatbot
+      const botDiv = document.createElement("div");
+      botDiv.classList.add("p-2", "bg-green-200", "rounded-lg", "text-left");
+      messages.appendChild(botDiv);
+      messages.scrollTop = messages.scrollHeight;
+
+      const reply = responses[userMessage.toLowerCase()] || "Xin lỗi, tôi chưa hiểu. Bạn có thể thử lại!";
+      botDiv.innerHTML = "";
+      typeEffect(botDiv, reply);
+      
+      messages.scrollTop = messages.scrollHeight;
+    }
+
+    // Bắt sự kiện Enter để gửi tin nhắn
+    document.getElementById('input').addEventListener("keypress", function(event) {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        sendMessage();
+      }
+    });
+
+  </script>
+
+</body>
+</html>
+
